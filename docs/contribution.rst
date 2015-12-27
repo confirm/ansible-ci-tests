@@ -96,6 +96,6 @@ If everything worked properly, create the new git tag / release and upload the p
     git push -u origin v{MAJOR}.{MINOR}.{BUGFIX}
 
     # Create and upload new PyPI release.
-    ./setup sdist upload
+    ./setup.py sdist upload
 
 The `docs <http://ansibleci.readthedocs.org/>`_ will be generated automatically.
