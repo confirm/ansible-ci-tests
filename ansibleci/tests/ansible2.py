@@ -19,18 +19,18 @@ class Ansible2(Test):
         '''
         Run method which will be called by the framework.
         '''
-        self.plays = self.helper.get_playbooks()
+        self.plays = self.get_helper().get_playbooks()
 
-        deprectated_directives = 'sudo', 'su_user', 'su'
-
-        for directive in deprectated_directives:
-            self.test_deprecated_directives(directive=directive)
+        self.test_deprecated_directives()
 
 
-    def test_deprecated_directives(self, directive):
+    def test_deprecated_directives(self):
         '''
         Tests if there are deprecated directives used in the playbook files.
         '''
+
+        deprectated_directives = 'sudo', 'su_user', 'su'
+
         for playbook,path in self.plays.iteritems():
 
             kwargs = {
@@ -38,13 +38,14 @@ class Ansible2(Test):
                 'playbook': playbook,
             }
 
-            for item in self.helper.read_yaml(path):
-                if directive in item:
-                    found = True
-                else:
-                    found = False
+            for item in self.get_helper().read_yaml(path):
+                for directive in deprectated_directives:
+                    if directive in item:
+                        found = True
+                    else:
+                        found = False
 
-            if found:
-                self.failed('Directive {directive} exists in the playbook {playbook}'.format(**kwargs))
-            else:
-                self.passed('Directive {directive} exists not in the playbook {playbook}'.format(**kwargs))
+                if found:
+                    self.failed('Directive {directive} exists in the playbook {playbook}'.format(**kwargs))
+                else:
+                    self.passed('Directive {directive} exists not in the playbook {playbook}'.format(**kwargs))
