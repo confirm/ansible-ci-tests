@@ -21,12 +21,29 @@ class Helper(object):
         '''
         self.config = config
 
-    def get_roles_path(self):
+    def get_absolute_path(self, path):
         '''
-        Returns the absolute path to the roles/ directory, while considering
-        the BASEDIR and ROLES config variables.
+        Returns the absolute path of the ``path`` argument.
+
+        If ``path`` is already absolute, nothing changes. If the ``path`` is
+        relative, then the BASEDIR will be prepended.
         '''
-        return os.path.abspath(os.path.join(self.config.BASEDIR, self.config.ROLES))
+        if os.path.isabs(path):
+            return path
+        else:
+            return os.path.abspath(os.path.join(self.config.BASEDIR, path))
+
+    def get_roles_paths(self):
+        '''
+        Returns all absolute paths to the roles/ directories, while considering
+        the ``BASEDIR`` and ``ROLES`` config variables.
+        '''
+        roles  = []
+
+        for path in self.config.ROLES:
+            roles.append(self.get_absolute_path(path))
+
+        return roles
 
     def get_playbooks_path(self):
         '''
@@ -56,12 +73,13 @@ class Helper(object):
         and the value is the absolute role path.
         '''
         roles = {}
-        path  = self.get_roles_path()
+        paths = self.get_roles_paths()
 
-        for entry in os.listdir(path):
-            rolepath = os.path.join(path, entry)
-            if os.path.isdir(rolepath):
-                roles[entry] = rolepath
+        for path in paths:
+            for entry in os.listdir(path):
+                rolepath = os.path.join(path, entry)
+                if os.path.isdir(rolepath):
+                    roles[entry] = rolepath
 
         return roles
 
