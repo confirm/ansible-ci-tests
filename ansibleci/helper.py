@@ -28,6 +28,28 @@ class Helper(object):
         '''
         return os.path.abspath(os.path.join(self.config.BASEDIR, self.config.ROLES))
 
+    def get_playbooks_path(self):
+        '''
+        Returns the absolute path to the playbooks/ directory, while considering
+        the BASEDIR and PLAYBOOKS config variables.
+        '''
+        return os.path.abspath(os.path.join(self.config.BASEDIR, self.config.PLAYBOOKS))
+
+    def get_playbooks(self):
+        '''
+        Returns a key-value dict with playbooks, while the key is the playbook name
+        and the value is the absolute playbook path.
+        '''
+        plays = {}
+        path  = self.get_playbooks_path()
+
+        for entry in os.listdir(path):
+            playpath = os.path.join(path, entry)
+            if os.path.isfile(playpath):
+                plays[entry] = playpath
+
+        return plays
+
     def get_roles(self):
         '''
         Returns a key-value dict with a roles, while the key is the role name

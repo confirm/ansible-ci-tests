@@ -19,6 +19,10 @@ BASEDIR = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), '..'))
 # Roles directory path, relativ to BASEDIR.
 ROLES = 'roles/'
 
+# Playbook directory path, relativ to BASEDIR.
+PLAYBOOKS = 'plays/'
+
+
 #
 # A list of tests to run.
 #
@@ -27,6 +31,7 @@ ENABLED_TESTS = [
     'ansibleci.tests.readme.Readme',
     'ansibleci.tests.handler.Handler',
     'ansibleci.tests.tag.Tag',
+    'ansibleci.tests.ansible2.Ansible2',
 ]
 
 #
