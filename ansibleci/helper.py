@@ -50,20 +50,29 @@ class Helper(object):
         Returns the absolute path to the playbooks/ directory, while considering
         the BASEDIR and PLAYBOOKS config variables.
         '''
-        return os.path.abspath(os.path.join(self.config.BASEDIR, self.config.PLAYBOOKS))
+        playbooks  = []
+
+        for path in self.config.PLAYBOOKS:
+            playbooks.append(self.get_absolute_path(path))
+
+        return playbooks
 
     def get_playbooks(self):
         '''
         Returns a key-value dict with playbooks, while the key is the playbook name
         and the value is the absolute playbook path.
+
+        Only files with the file_extension .yml will be added to the dict.
         '''
         plays = {}
-        path  = self.get_playbooks_path()
+        paths  = self.get_playbooks_path()
 
-        for entry in os.listdir(path):
-            playpath = os.path.join(path, entry)
-            if os.path.isfile(playpath):
-                plays[entry] = playpath
+        for path in paths:
+            for entry in os.listdir(path):
+                playpath = os.path.join(path, entry)
+                file_extension = '.'.join(os.path.basename(playpath).split('.')[1:])
+                if os.path.isfile(playpath) and file_extension == 'yml':
+                    plays[entry] = playpath
 
         return plays
 

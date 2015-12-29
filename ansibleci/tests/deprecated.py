@@ -10,16 +10,20 @@ from ansibleci.test import Test
 import os
 
 
-class Ansible2(Test):
+class Deprecated(Test):
     '''
-    Test to check if Ansible Project is ready for Ansible 2.
+    Test to check if deprecated directives are used.
     '''
 
     def run(self):
         '''
         Run method which will be called by the framework.
         '''
-        self.plays = self.get_helper().get_playbooks()
+        self.config = self.get_config()
+        self.helper = self.get_helper()
+
+        self.plays = self.helper.get_playbooks()
+        self.directives = self.config.DEPRECATED_DIRECTIVES
 
         self.test_deprecated_directives()
 
@@ -29,23 +33,28 @@ class Ansible2(Test):
         Tests if there are deprecated directives used in the playbook files.
         '''
 
-        deprectated_directives = 'sudo', 'su_user', 'su'
+        counter = {}
 
         for playbook,path in self.plays.iteritems():
 
-            kwargs = {
-                'directive': directive,
-                'playbook': playbook,
-            }
+            for directive in self.directives:
+                counter[directive] = 0
 
-            for item in self.get_helper().read_yaml(path):
-                for directive in deprectated_directives:
+            for item in self.helper.read_yaml(path):
+                for directive in self.directives:
                     if directive in item:
-                        found = True
-                    else:
-                        found = False
+                        counter[directive] += 1
 
-                if found:
-                    self.failed('Directive {directive} exists in the playbook {playbook}'.format(**kwargs))
-                else:
+            for directive in self.directives:
+                count = counter[directive]
+                kwargs = {
+                    'playbook': playbook,
+                    'directive': directive,
+                    'count': count
+                }
+                if count == 0:
                     self.passed('Directive {directive} exists not in the playbook {playbook}'.format(**kwargs))
+                elif count == 1:
+                    self.failed('Directive {directive} exists {count} time in the playbook {playbook}'.format(**kwargs))
+                else:
+                    self.failed('Directive {directive} exists {count} times in the playbook {playbook}'.format(**kwargs))

@@ -34,7 +34,7 @@ ENABLED_TESTS = [
     'ansibleci.tests.readme.Readme',
     'ansibleci.tests.handler.Handler',
     'ansibleci.tests.tag.Tag',
-    'ansibleci.tests.ansible2.Ansible2',
+    'ansibleci.tests.deprecated.Deprecated',
 ]
 
 #
@@ -53,3 +53,14 @@ README_CHECK_DEFAULTS = True
 
 # Should the tag name be identical with the role name?
 TAG_ROLE_NAME = True
+
+#
+# Settings for ansibleci.tests.deprecated.
+#
+
+# A list with deprecated directives.
+DEPRECATED_DIRECTIVES = [
+    'sudo',
+    'su_user',
+    'su',
+]
