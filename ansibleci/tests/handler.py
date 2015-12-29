@@ -12,15 +12,18 @@ import os
 
 class Handler(Test):
     '''
-    Test to check if all defined handlers in `tasks/*` are really available in
-    one of the `handlers/*` files.
+    Test to check if all notified handlers (i.e. ``notify:``) are available.
+
+    The task ``notify:`` parameters will be looked up in all ``tasks/*`` files,
+    while the handler ``name:`` parameters will be looked up in all
+    ``handlers/*`` files.
     '''
 
     def run(self):
         '''
         Runs all tests defined in the config's ENABLED_TESTS list.
         '''
-        self.roles = self.helper.get_roles()
+        self.roles = self.get_helper().get_roles()
 
         notifies = self.get_notifies()
         handlers = self.get_handlers()
@@ -42,7 +45,7 @@ class Handler(Test):
 
         for name, path in self.roles.iteritems():
             dir_path      = os.path.join(path, 'tasks')
-            role_notifies = self.helper.get_yaml_items(dir_path=dir_path, param='notify')
+            role_notifies = self.get_helper().get_yaml_items(dir_path=dir_path, param='notify')
             if role_notifies:
                 notifies[name] = role_notifies
 
@@ -56,6 +59,6 @@ class Handler(Test):
 
         for name, path in self.roles.iteritems():
             dir_path = os.path.join(path, 'handlers')
-            handlers.extend(self.helper.get_yaml_items(dir_path=dir_path, param='name'))
+            handlers.extend(self.get_helper().get_yaml_items(dir_path=dir_path, param='name'))
 
         return handlers

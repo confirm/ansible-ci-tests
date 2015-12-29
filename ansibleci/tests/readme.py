@@ -14,29 +14,29 @@ class Readme(Test):
     '''
     Test to check if all roles have a Readme file in place.
 
-    If the `README_CHECK_DEFAULTS` config flag is set to `True`, then it will
-    also check if the role's default variables are mentioned in the role's
-    Readme file.
+    If the ``README_CHECK_DEFAULTS`` config flag is set to ``True``, then it
+    will also check if the role's default variables (i.e. ``defaults/*``) are
+    mentioned in the role's Readme file.
 
-    The name of the Readme file is controled with the `README_FILENAME` config
-    variable
+    The name of the Readme file is controled with the ``README_FILENAME``
+    config variable.
     '''
 
     def run(self):
         '''
         Run method which will be called by the framework.
         '''
-        self.roles = self.helper.get_roles()
-        self.test_readme()
+        roles = self.get_helper().get_roles()
+        self.test_readme(roles)
 
-    def test_readme(self):
+    def test_readme(self, roles):
         '''
         Tests the existence of role's README files and if the README files
         exists it will call the test_defaults() for each role.
         '''
-        readme_filename = self.config.README_FILENAME
+        readme_filename = self.get_config().README_FILENAME
 
-        for name, path in self.roles.iteritems():
+        for name, path in roles.iteritems():
             readme = os.path.join(path, readme_filename)
             if os.path.isfile(readme):
                 self.passed('Readme file for role {role} is existing'.format(role=name))
@@ -49,7 +49,7 @@ class Readme(Test):
         Tests if all variables in the defaults/main.yml are documented in the
         role's Readme file.
         '''
-        if not self.config.README_CHECK_DEFAULTS:
+        if not self.get_config().README_CHECK_DEFAULTS:
             return
 
         defaults = os.path.join(path, 'defaults/main.yml')
@@ -60,7 +60,7 @@ class Readme(Test):
         with open(readme, 'r') as f:
             readme_content = f.read()
 
-        for var in self.helper.read_yaml(defaults).keys():
+        for var in self.get_helper().read_yaml(defaults).keys():
             kwargs = {'var': var, 'role': name}
             if var in readme_content:
                 self.passed('Default variable {var} of role {role} is mentioned in role\'s Readme file'.format(**kwargs))

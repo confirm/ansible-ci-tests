@@ -12,7 +12,7 @@ import yaml
 
 class Helper(object):
     '''
-    Helper class which provides some helper methods.
+    Helper class which provides common used helper methods.
     '''
 
     def __init__(self, config):

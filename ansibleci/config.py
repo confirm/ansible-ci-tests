@@ -8,13 +8,24 @@
 
 class Config(object):
     '''
-    Configuration class which can be used to load configuration parameters from
-    a Python module and query them later.
+    Configuration class which can be used to work with configuration parameters.
+
+    The class is designed to work with getters and setters, so you can easily
+    read / write config parameters by accessing the Config instance's
+    attributes. You can also add complete Python modules to the Config instance
+    by calling the add_module() method.
+
+    By default all ``ansibleci.defaults`` will be loaded, however you can
+    overwrite that in the constructor.
     '''
 
     def __init__(self, load_defaults=True):
         '''
         Class constructor which initializes the internal configuration dict.
+
+        By default the Config instance will load ``ansibleci.defaults``, though you
+        can supress that by setting ``load_defaults=False`` while creating the
+        Config instance.
         '''
         self.config = {}
 

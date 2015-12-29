@@ -50,7 +50,7 @@ To create a new *ansibleci* release make sure the new version meets the followin
 
 * a **release branch** or a **hotfix branch** is existing
 * everything is **checked in**
-* all **classed and methods are described / documented**
+* all **classes and methods are described / documented**
 * all **tests are documented** in `docs/built-in-tests.rst <https://github.com/confirm/ansibleci/blob/develop/docs/built-in-tests.rst>`_
 * the new release is **tested properly**
 * the PyPI `setup.py script <https://github.com/confirm/ansibleci/blob/develop/setup.py>`_ is updated with the **new targeted version**

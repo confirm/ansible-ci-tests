@@ -22,6 +22,26 @@ class Test(object):
         self.helper     = runner.helper
         self.has_passed = True
 
+    def get_runner(self):
+        '''
+        Returns the Runner instance which has called / instanced us.
+        '''
+        return self.runner
+
+    def get_config(self):
+        '''
+        Returns the Runner's Config instance, which can be used to access
+        configuration params.
+        '''
+        return self.config
+
+    def get_helper(self):
+        '''
+        Returns the Runner's Helper instance, which can be used to access
+        common used methods.
+        '''
+        return self.helper
+
     def passed(self, message):
         '''
         Marks a (sub-)test as passed.

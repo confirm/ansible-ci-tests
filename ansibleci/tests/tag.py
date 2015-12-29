@@ -12,9 +12,9 @@ import os
 
 class Tag(Test):
     '''
-    Test to check if all tasks are tagged.
+    Test to check if all tasks are tagged properly with the ``tags:`` parameter.
 
-    If the `TAG_ROLE_NAME` config flag is set to `True`, the test will also
+    If the ``TAG_ROLE_NAME`` config flag is set to ``True``, the test will also
     make sure that all tasks are tagged with the role's name.
     '''
 
@@ -22,20 +22,23 @@ class Tag(Test):
         '''
         Run method which will be called by the framework.
         '''
-        for name, path in self.helper.get_roles().iteritems():
+        config = self.get_config()
+        helper = self.get_helper()
+
+        for name, path in helper.get_roles().iteritems():
 
             dir_path = os.path.join(path, 'tasks')
-            items    = self.helper.get_yaml_items(dir_path)
+            items    = helper.get_yaml_items(dir_path)
 
             for item in items:
 
                 kwargs = {
-                    'task': self.helper.get_item_identifier(item),
+                    'task': helper.get_item_identifier(item),
                     'role': name
                 }
 
                 if 'tags' in item:
-                    if self.config.TAG_ROLE_NAME:
+                    if config.TAG_ROLE_NAME:
                         tags = item['tags']
                         if (isinstance(tags, list) and name in tags) or tags == name:
                             self.passed('Task "{task}" in role {role} is tagged with the role name'.format(**kwargs))
