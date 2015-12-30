@@ -52,7 +52,7 @@ class Helper(object):
         Returns the absolute path to the tasks/ directories of all roles.
         '''
         tasks  = []
-        for name,path in self.get_roles().iteritems():
+        for name, path in self.get_roles().iteritems():
             task_dir = os.path.join(path, 'tasks')
             abs_path = self.get_absolute_path(task_dir)
             if os.path.isdir(abs_path):
