@@ -24,7 +24,7 @@ class Deprecated(Test):
         self.directives = self.config.DEPRECATED_DIRECTIVES
 
         self.test_deprecated_directives(self.helper.get_playbook_yaml_files())
-        self.test_deprecated_directives(self.helper.get_role_tasks())
+        self.test_deprecated_directives(self.helper.get_role_task_yaml_files())
 
     def initialize_counter(self):
         '''
