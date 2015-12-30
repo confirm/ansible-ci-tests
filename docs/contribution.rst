@@ -6,6 +6,51 @@ Merge Requests
 
 We would be happy to get new contributors. Feel free to open issues and send us merge requests.
 
+Python Style Guide
+------------------
+
+We're trying to be consistent with `PEP 0008 - Style Guide for Python <https://www.python.org/dev/peps/pep-0008/>`_.
+
+However, please note we don't follow the following rules:
+
+* E221: We try to align variable assignments nicely to improve readability
+* E501: The maximum line length of 79 chars is not very nice for readability
+
+Please also think about the format of your data structures, especially for extendible ones.
+For example:
+
+.. code-block:: python
+
+    # This works.
+    foo = ['a', 'b', 'c']
+
+    # But this is much better.
+    bar = [
+        'a',
+        'b',
+        'c',
+    ]
+
+If you're expanding both lists and you make a ``diff``, you'll notice that the changes of ``foo`` are much harder to tell than the changes of ``bar``.
+So try to use multiple lines instead of only single ones and make sure you always add a comma to the last element as well.
+
+There are great tools out there which can help you to test against PEP 0008 or even automatically reformat your code.
+The ones we're using are:
+
+* `pep8 <https://pypi.python.org/pypi/pep8>`_ is standalone tool (installable via ``pip install pep8``)
+* `Python PEP8 Autoformat <https://packagecontrol.io/packages/Python%20PEP8%20Autoformat>`_ is a `Sublime Text <http://www.sublimetext.com/>`_ plugin
+
+If you're using the Sublime Text plugin, make sure you set the following package options:
+
+.. code-block:: json
+
+    {
+        "ignore": [
+            "E221",
+            "E501",
+        ],
+    }
+
 Branches
 --------
 
