@@ -41,9 +41,23 @@ class Helper(object):
         roles  = []
 
         for path in self.config.ROLES:
-            roles.append(self.get_absolute_path(path))
+            abs_path = self.get_absolute_path(path)
+            if os.path.isdir(abs_path):
+                roles.append(abs_path)
 
         return roles
+
+    def get_role_tasks_path(self):
+        '''
+        Returns the absolute path to the tasks/ directories of all roles.
+        '''
+        tasks  = []
+        for name,path in self.get_roles().iteritems():
+            task_dir = os.path.join(path, 'tasks')
+            abs_path = self.get_absolute_path(task_dir)
+            if os.path.isdir(abs_path):
+                tasks.append(abs_path)
+        return tasks
 
     def get_playbooks_path(self):
         '''
@@ -53,28 +67,38 @@ class Helper(object):
         playbooks  = []
 
         for path in self.config.PLAYBOOKS:
-            playbooks.append(self.get_absolute_path(path))
+            abs_path = self.get_absolute_path(path)
+            if os.path.isdir(abs_path):
+                playbooks.append(abs_path)
 
         return playbooks
 
-    def get_playbooks(self):
+    def get_playbook_yaml_files(self):
         '''
-        Returns a key-value dict with playbooks, while the key is the playbook name
-        and the value is the absolute playbook path.
-
-        Only files with the file_extension .yml will be added to the dict.
+        Returns a list with all playbook yaml files.
         '''
-        plays = {}
-        paths  = self.get_playbooks_path()
+        return self.get_yaml_files(self.get_playbooks_path())
 
-        for path in paths:
+    def get_role_task_yaml_files(self):
+        '''
+        Returns a list with all task yaml files of all roles.
+        '''
+        return self.get_yaml_files(self.get_role_tasks_path())
+
+    def get_yaml_files(self, directory):
+        '''
+        Returns the absolute path of all yaml files in the ``directory`` argument.
+        '''
+        files = []
+
+        for path in directory:
             for entry in os.listdir(path):
-                playpath = os.path.join(path, entry)
-                file_extension = '.'.join(os.path.basename(playpath).split('.')[1:])
-                if os.path.isfile(playpath) and file_extension == 'yml':
-                    plays[entry] = playpath
+                file_path = os.path.join(path, entry)
+                file_extension = '.'.join(os.path.basename(file_path).split('.')[1:])
+                if os.path.isfile(file_path) and file_extension == 'yml':
+                    files.append(file_path)
 
-        return plays
+        return files
 
     def get_roles(self):
         '''
