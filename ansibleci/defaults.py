@@ -61,6 +61,7 @@ TAG_ROLE_NAME = True
 # A list with deprecated directives.
 DEPRECATED_DIRECTIVES = [
     'sudo',
-    'su_user',
+    'sudo_user',
     'su',
+    'su_user',
 ]
