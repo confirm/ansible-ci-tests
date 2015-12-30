@@ -21,26 +21,30 @@ class Deprecated(Test):
         '''
         self.config = self.get_config()
         self.helper = self.get_helper()
-
-        self.plays = self.helper.get_playbooks()
         self.directives = self.config.DEPRECATED_DIRECTIVES
 
-        self.test_deprecated_directives()
+        self.test_deprecated_directives(self.helper.get_playbook_yaml_files())
+        self.test_deprecated_directives(self.helper.get_role_tasks())
 
-
-    def test_deprecated_directives(self):
+    def initialize_counter(self):
         '''
-        Tests if there are deprecated directives used in the playbook files.
+        Initialize a counter for the directives.
         '''
-
         counter = {}
+        for directive in self.directives:
+            counter[directive] = 0
+        return counter
 
-        for playbook,path in self.plays.iteritems():
+    def test_deprecated_directives(self, files):
+        '''
+        Tests if there are deprecated directives used in the yaml files.
+        '''
+        for path in files:
+            content = self.helper.read_yaml(path)
 
-            for directive in self.directives:
-                counter[directive] = 0
+            counter = self.initialize_counter()
 
-            for item in self.helper.read_yaml(path):
+            for item in content:
                 for directive in self.directives:
                     if directive in item:
                         counter[directive] += 1
@@ -48,13 +52,13 @@ class Deprecated(Test):
             for directive in self.directives:
                 count = counter[directive]
                 kwargs = {
-                    'playbook': playbook,
+                    'name': path,
                     'directive': directive,
                     'count': count
                 }
                 if count == 0:
-                    self.passed('Directive {directive} exists not in the playbook {playbook}'.format(**kwargs))
+                    self.passed('Directive {directive} exists not in the file {name}'.format(**kwargs))
                 elif count == 1:
-                    self.failed('Directive {directive} exists {count} time in the playbook {playbook}'.format(**kwargs))
+                    self.failed('Directive {directive} exists {count} time in the file {name}'.format(**kwargs))
                 else:
-                    self.failed('Directive {directive} exists {count} times in the playbook {playbook}'.format(**kwargs))
+                    self.failed('Directive {directive} exists {count} times in the file {name}'.format(**kwargs))
