@@ -95,7 +95,7 @@ class Helper(object):
             for entry in os.listdir(path):
                 file_path = os.path.join(path, entry)
                 file_extension = '.'.join(os.path.basename(file_path).split('.')[1:])
-                if os.path.isfile(file_path) and file_extension == 'yml':
+                if os.path.isfile(file_path) and file_extension in self.config.FILE_EXENTSIONS:
                     files.append(file_path)
 
         return files

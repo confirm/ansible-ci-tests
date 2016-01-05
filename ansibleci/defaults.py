@@ -26,6 +26,12 @@ PLAYBOOKS = [
     'plays/',
 ]
 
+# File extensions, which are used in the ansible project.
+FILE_EXENTSIONS = [
+    'yml',
+    'yaml',
+]
+
 #
 # A list of tests to run.
 #
