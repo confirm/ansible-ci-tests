@@ -26,7 +26,7 @@ PLAYBOOKS = [
     'plays/',
 ]
 
-# File extensions, which are used in the ansible project.
+# A list with File extensions, which are used in the ansible project.
 FILE_EXENTSIONS = [
     'yml',
     'yaml',
