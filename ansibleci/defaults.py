@@ -21,6 +21,17 @@ ROLES = [
     'roles/',
 ]
 
+# Playbooks directory paths, can be absolute or relative (to BASEDIR).
+PLAYBOOKS = [
+    'plays/',
+]
+
+# A list with File extensions, which are used in the ansible project.
+FILE_EXENTSIONS = [
+    'yml',
+    'yaml',
+]
+
 #
 # A list of tests to run.
 #
@@ -29,6 +40,7 @@ ENABLED_TESTS = [
     'ansibleci.tests.readme.Readme',
     'ansibleci.tests.handler.Handler',
     'ansibleci.tests.tag.Tag',
+    'ansibleci.tests.deprecated.Deprecated',
 ]
 
 #
@@ -54,3 +66,15 @@ README_CHECK_DEFAULTS = True
 
 # Should the tag name be identical with the role name?
 TAG_ROLE_NAME = True
+
+#
+# Settings for ansibleci.tests.deprecated.
+#
+
+# A list with deprecated directives.
+DEPRECATED_DIRECTIVES = [
+    'sudo',
+    'sudo_user',
+    'su',
+    'su_user',
+]

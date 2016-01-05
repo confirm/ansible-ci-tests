@@ -12,6 +12,7 @@ setup(
     author='confirm IT solutions',
     author_email='pypi@confirm.ch',
     url='https://github.com/confirm/ansibleci',
+    license = "MIT",
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
