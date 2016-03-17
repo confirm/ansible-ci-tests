@@ -21,7 +21,7 @@ class Handler(Test):
 
     def run(self):
         '''
-        Runs all tests defined in the config's ENABLED_TESTS list.
+        Run method which will be called by the framework.
         '''
         self.roles = self.get_helper().get_roles()
 
