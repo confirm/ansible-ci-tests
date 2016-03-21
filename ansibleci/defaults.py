@@ -16,9 +16,20 @@ import os
 # Basedir which should point to an Ansible project.
 BASEDIR = os.getcwd()
 
-# Roles directory paths, can be absolute or relative (to BASEDIR).
+# Roles directory path(s), can be absolute or relative to BASEDIR.
 ROLES = [
     'roles/',
+]
+
+# Playbook directory path(s), can be absolute or relative to BASEDIR.
+PLAYBOOKS = [
+    'plays/',
+]
+
+# File extensions, which are used for yml files in the ansible project directories.
+YAML_FILE_EXENTSIONS = [
+    'yml',
+    'yaml',
 ]
 
 #
@@ -29,6 +40,7 @@ ENABLED_TESTS = [
     'ansibleci.tests.readme.Readme',
     'ansibleci.tests.handler.Handler',
     'ansibleci.tests.tag.Tag',
+    'ansibleci.tests.deprecated.Deprecated',
 ]
 
 #
@@ -54,3 +66,21 @@ README_CHECK_DEFAULTS = True
 
 # Should the tag name be identical with the role name?
 TAG_ROLE_NAME = True
+
+
+#
+# Settings for ansibleci.tests.deprecated.
+#
+
+# A list with deprecated directives.
+DEPRECATED_DIRECTIVES = [
+    'sudo',
+    'sudo_user',
+    'su',
+    'su_user',
+]
+
+DEPRECATED_RELEVANT_DIRECTORIES = [
+    'tasks',
+    'handlers',
+]

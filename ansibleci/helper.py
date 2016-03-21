@@ -34,9 +34,16 @@ class Helper(object):
         else:
             return os.path.abspath(os.path.join(self.config.BASEDIR, path))
 
+    def get_file_extension(self, file):
+        '''
+        Returns the file extension of a file. The ``file`` argument can be
+        a simple filename or a absoulte path.
+        '''
+        return '.'.join(os.path.basename(file).split('.')[1:])
+
     def get_roles_paths(self):
         '''
-        Returns all absolute paths to the roles/ directories, while considering
+        Returns all absolute paths to the role directories, while considering
         the ``BASEDIR`` and ``ROLES`` config variables.
         '''
         roles  = []
@@ -45,6 +52,18 @@ class Helper(object):
             roles.append(self.get_absolute_path(path))
 
         return roles
+
+    def get_playbook_paths(self):
+        '''
+        Returns all absolute paths to the playbook directories, while considering
+        the ``BASEDIR`` and ``PLAYBOOKS`` config variables.
+        '''
+        playbooks  = []
+
+        for path in self.config.PLAYBOOKS:
+            playbooks.append(self.get_absolute_path(path))
+
+        return playbooks
 
     def get_roles(self):
         '''
@@ -71,6 +90,40 @@ class Helper(object):
             y = yaml.safe_load(d)
             return y if y else {}
 
+    def verify_yaml_file(self, file_path):
+        '''
+        Return True or False, if the ``file_path`` is a file and the
+        file extension matchs the ``YAML_FILE_EXENTSIONS``.
+        '''
+        if os.path.isfile(file_path) and self.get_file_extension(file_path) in self.config.YAML_FILE_EXENTSIONS:
+            return True
+        else:
+            return False
+
+    def get_yaml_files(self, dir_path, recursive=False):
+        '''
+        Returns a list of all yaml files in a directory.
+        '''
+        result = []
+
+        if not os.path.isdir(dir_path):
+            return []
+
+        if recursive:
+            for root, dirname, filenames in os.walk(dir_path):
+                for filename in filenames:
+                    file_path = os.path.join(root, filename)
+                    if self.verify_yaml_file(file_path):
+                        result.append(file_path)
+            return result
+
+        else:
+            for filename in os.listdir(dir_path):
+                file_path = os.path.join(dir_path, filename)
+                if self.verify_yaml_file(file_path):
+                    result.append(file_path)
+            return result
+
     def get_yaml_items(self, dir_path, param=None):
         '''
         Loops through the dir_path and parses all YAML files inside the
@@ -80,27 +133,21 @@ class Helper(object):
         in a list. If a param is defined, then all items will be scanned for
         this param and a list of all those values will be returned.
         '''
-
         result = []
 
-        if not os.path.isdir(dir_path):
-            return []
+        for filename in self.get_yaml_files(dir_path):
+                items = self.read_yaml(filename)
 
-        for filename in os.listdir(dir_path):
-
-            path  = os.path.join(dir_path, filename)
-            items = self.read_yaml(path)
-
-            for item in items:
-                if param:
-                    if param in item:
-                        item = item[param]
-                        if isinstance(item, list):
-                            result.extend(item)
-                        else:
-                            result.append(item)
-                else:
-                    result.append(item)
+                for item in items:
+                    if param:
+                        if param in item:
+                            item = item[param]
+                            if isinstance(item, list):
+                                result.extend(item)
+                            else:
+                                result.append(item)
+                    else:
+                        result.append(item)
 
         return result
 
