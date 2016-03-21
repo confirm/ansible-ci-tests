@@ -29,6 +29,7 @@ ENABLED_TESTS = [
     'ansibleci.tests.readme.Readme',
     'ansibleci.tests.handler.Handler',
     'ansibleci.tests.tag.Tag',
+    'ansibleci.tests.prefix.Prefix',
 ]
 
 #
@@ -54,3 +55,16 @@ README_CHECK_DEFAULTS = True
 
 # Should the tag name be identical with the role name?
 TAG_ROLE_NAME = True
+
+#
+# Settings for ansibleci.tests.prefix.
+#
+
+# Prefix seperator.
+PREFIX_SEPERATOR = '_'
+
+# Directories for Prefix check.
+PREFIX_VARIABLE_DIRECTORIES = [
+    'defaults',
+    'vars',
+]
